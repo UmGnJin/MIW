@@ -1,0 +1,54 @@
+// Decompiled with JetBrains decompiler
+// Type: WanderingMob
+// Assembly: Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 09F9DBAA-6030-4950-95C8-A650F14B729D
+// Assembly location: C:\Users\MS-Kang\Desktop\IWBTPG\IWBTPG_Data\Managed\Assembly-CSharp.dll
+
+using UnityEngine;
+
+public class WanderingMob : MonoBehaviour
+{
+  public float movet = 1.5f;
+  public float setmovet = 1.5f;
+  private float speed = 2f;
+  private bool lmove;
+
+  private void Start()
+  {
+  }
+
+  private void Update()
+  {
+    if (this.lmove)
+    {
+      this.transform.Translate(-this.speed * Time.deltaTime, 0.0f, 0.0f);
+      this.transform.localScale = new Vector3(-1f, 1f, 1f);
+      this.movet -= Time.deltaTime;
+      if ((double) this.movet > 0.0)
+        return;
+      this.lmove = false;
+      this.movet = this.setmovet;
+    }
+    else
+    {
+      if (this.lmove)
+        return;
+      this.transform.Translate(this.speed * Time.deltaTime, 0.0f, 0.0f);
+      this.transform.localScale = new Vector3(1f, 1f, 1f);
+      this.movet -= Time.deltaTime;
+      if ((double) this.movet > 0.0)
+        return;
+      this.lmove = true;
+      this.movet = this.setmovet;
+    }
+  }
+
+  public void Die()
+  {
+    this.enabled = false;
+    this.gameObject.GetComponentInChildren<SpriteRenderer>().flipY = true;
+    this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+    this.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0.0f, 10f), ForceMode2D.Impulse);
+    Object.Destroy((Object) this.gameObject, 3f);
+  }
+}
